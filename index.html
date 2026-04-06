@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="pt-pt" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Cutucada 2025</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cutucu-purple: #a855f7;
+            --cutucu-pink: #d946ef;
+            --bg-dark: #050208;
+            --neon-purple: #bc6ff1;
+            --neon-pink: #f806cc;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: #ffffff;
+            margin: 0;
+            overflow: hidden;
+        }
+        h1, h2, h3, .font-display {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .text-gradient {
+            background: linear-gradient(to right, var(--cutucu-pink), var(--cutucu-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .bg-glass {
+            background: rgba(168, 85, 247, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(168, 85, 247, 0.15);
+        }
+        .sidebar {
+            background: rgba(5, 2, 8, 0.8);
+            border-right: 1px solid rgba(168, 85, 247, 0.1);
+            backdrop-filter: blur(20px);
+        }
+        .nav-btn {
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            border: 1px solid transparent;
+        }
+        .nav-btn.active {
+            background: rgba(168, 85, 247, 0.15);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            color: var(--cutucu-purple);
+        }
+        .nav-btn:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .section-content {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+        .section-content.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #050208;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #2a104a;
+            border-radius: 10px;
+        }
+        .img-card {
+            transition: all 0.4s ease;
+        }
+        .img-card:hover {
+            transform: scale(1.05);
+            border-color: rgba(168, 85, 247, 0.4);
+            z-index: 10;
+        }
+        .social-link {
+            transition: all 0.3s ease;
+        }
+        .social-link:hover {
+            background: rgba(168, 85, 247, 0.1);
+            border-color: var(--cutucu-purple);
+            transform: translateX(5px);
+        }
+
+        /* Estilo dos Planos Roxo e Neon */
+        .plan-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            color: #ffffff;
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(168, 85, 247, 0.15);
+        }
+        .plan-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--cutucu-purple);
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .plan-header {
+            padding: 32px 24px;
+            color: white;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-align: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+        }
+        .feature-row {
+            padding: 16px 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 14px;
+        }
+        .feature-label {
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 4px;
+            display: block;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+        .feature-value {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        #cutucada-bg {
+            background-image: linear-gradient(rgba(5, 2, 8, 0.65), rgba(5, 2, 8, 0.65)), url('src/background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 40px;
+            border: 1px solid rgba(168, 85, 247, 0.25);
+            min-height: 850px; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: all 0.5s ease;
+        }
+
+        .play-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .play-btn-circle {
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(8px);
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+        .group:hover .play-overlay {
+            background: rgba(168, 85, 247, 0.4);
+        }
+        .group:hover .play-btn-circle {
+            transform: scale(1.2);
+            border-color: #ffffff;
+            background: rgba(168, 85, 247, 0.6);
+        }
+    </style>
+</head>
+<body class="antialiased flex h-screen overflow-hidden">
+
+    <!-- Navegação Lateral -->
+    <aside class="sidebar w-72 flex-shrink-0 flex flex-col h-full z-50">
+        <div class="p-8">
+            <div class="flex items-center gap-3 mb-10">
+                <img src="src/logo.png" alt="Logo Cutucu" class="h-10 w-auto" onerror="this.src='src/logocutucada.jpg'">
+                <span class="font-black text-lg tracking-tighter uppercase italic text-gradient">Dashboard</span>
+            </div>
+
+            <nav class="space-y-2">
+                <button onclick="navigate('quem-somos')" id="btn-quem-somos" class="nav-btn active w-full flex items-center gap-4 px-5 py-4 text-sm font-bold text-zinc-400">
+                    <span class="text-xl">🤝</span> Quem Somos Nós
+                </button>
+                <button onclick="navigate('marca-no-role')" id="btn-marca-no-role" class="nav-btn w-full flex items-center gap-4 px-5 py-4 text-sm font-bold text-zinc-400">
+                    <span class="text-xl">🎯</span> Sua Marca no Rolê
+                </button>
+                <button onclick="navigate('planos')" id="btn-planos" class="nav-btn w-full flex items-center gap-4 px-5 py-4 text-sm font-bold text-zinc-400">
+                    <span class="text-xl">💎</span> Planos de Patrocínio
+                </button>
+                <button onclick="navigate('cutucada')" id="btn-cutucada" class="nav-btn w-full flex items-center gap-4 px-5 py-4 text-sm font-bold text-zinc-400">
+                    <span class="text-xl">🐙</span> Cutucada
+                </button>
+            </nav>
+        </div>
+
+        <div class="mt-auto p-8 border-t border-white/5 text-[10px] text-zinc-600 font-bold uppercase tracking-widest text-center">
+            República Cutucu <br> São Carlos/SP
+        </div>
+    </aside>
+
+    <!-- Conteúdo Principal -->
+    <main class="flex-1 overflow-y-auto custom-scrollbar relative bg-[#050208]">
+        
+        <header class="sticky top-0 z-40 bg-black/40 backdrop-blur-md px-12 py-6 border-b border-white/5 flex justify-between items-center">
+            <h1 id="page-title" class="text-2xl font-black italic tracking-tight">Quem Somos Nós</h1>
+            <a href="https://wa.me/5516999743335" class="bg-purple-600 hover:bg-purple-500 text-white px-6 py-2 rounded-lg text-xs font-black uppercase transition-all shadow-lg shadow-purple-500/20">
+                Falar com Organização
+            </a>
+        </header>
+
+        <div class="p-12 max-w-[1400px] mx-auto">
+
+            <!-- QUEM SOMOS NÓS -->
+            <section id="quem-somos" class="section-content active">
+                <div class="grid lg:grid-cols-2 gap-16 items-center mb-16">
+                    <div>
+                        <div class="inline-block px-3 py-1 bg-purple-500/10 border border-purple-500/30 rounded text-[10px] font-black text-purple-400 uppercase tracking-[0.2em] mb-6">
+                            Desde 2009
+                        </div>
+                        <h2 class="text-6xl font-black leading-[0.9] mb-8 tracking-tighter">
+                            A Parceria que <br> <span class="text-gradient italic">Dá Match.</span>
+                        </h2>
+                        <p class="text-zinc-400 text-lg leading-relaxed mb-10">
+                            A <span class="text-white font-bold">República Cutucu</span> é referência no cenário universitário de São Carlos. Com mais de uma década de história, construímos uma comunidade fiel e engajada que respira entretenimento, esporte e integração.
+                        </p>
+                        
+                        <div class="flex gap-10">
+                            <div>
+                                <div class="text-4xl font-black text-white">40k+</div>
+                                <div class="text-[10px] font-bold text-purple-500 uppercase tracking-widest">Alcance Digital</div>
+                            </div>
+                            <div>
+                                <div class="text-4xl font-black text-white">600+</div>
+                                <div class="text-[10px] font-bold text-purple-500 uppercase tracking-widest">Público Real</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="aspect-square rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
+                            <img src="src/cutukush2.jpg" alt="Equipe Cutucu" class="w-full h-full object-cover grayscale-[30%] hover:grayscale-0 transition-all duration-700">
+                        </div>
+                        <div class="aspect-square rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
+                            <img src="src/cutukush1.jpg" alt="Vibe Cutucu" class="w-full h-full object-cover grayscale-[30%] hover:grayscale-0 transition-all duration-700">
+                        </div>
+                        <div class="col-span-2 aspect-[2/1] rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
+                            <img src="src/arapucaribe.jpg" alt="Integração Cutucu" class="w-full h-full object-cover grayscale-[30%] hover:grayscale-0 transition-all duration-700">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-12 p-10 bg-glass rounded-3xl border border-white/5">
+                    <h3 class="text-xl font-black italic uppercase tracking-widest mb-8 text-gradient">Nossa Presença Digital</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <a href="https://www.instagram.com/repducutucu/" target="_blank" class="social-link flex items-center gap-5 p-6 bg-black/40 rounded-2xl border border-white/5">
+                            <div class="w-14 h-14 bg-zinc-800 rounded-xl overflow-hidden border border-white/10 p-2">
+                                <img src="src/logo.png" alt="Logo Cutucu" class="w-full h-full object-contain">
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg text-white">@repducutucu</h4>
+                                <p class="text-xs text-zinc-500">O coração da nossa república.</p>
+                            </div>
+                        </a>
+                        <a href="https://www.instagram.com/cutucueventos/reels/" target="_blank" class="social-link flex items-center gap-5 p-6 bg-black/40 rounded-2xl border border-white/5">
+                            <div class="w-14 h-14 bg-purple-600 rounded-xl overflow-hidden border border-white/10 shadow-lg shadow-purple-500/20">
+                                <img src="src/logocutucada.jpg" alt="Logo Cutucada" class="w-full h-full object-cover rounded-xl">
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg text-white">@cutucueventos</h4>
+                                <p class="text-xs text-zinc-500">Vitrine dos nossos rolês.</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SUA MARCA NO ROLÊ -->
+            <section id="marca-no-role" class="section-content">
+                <div class="mb-12">
+                    <h2 class="text-4xl font-black mb-4 italic">Onde sua marca aparece?</h2>
+                    <p class="text-zinc-400">Garantimos visibilidade multicanal antes, durante e depois do evento.</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+                    <div class="p-6 rounded-xl bg-glass border border-white/5">
+                        <div class="text-3xl mb-4">👕</div>
+                        <h4 class="text-lg font-bold mb-2">Uniformes</h4>
+                        <p class="text-zinc-500 text-xs">Sua marca no peito da organização.</p>
+                    </div>
+                    <div class="p-6 rounded-xl bg-glass border border-white/5">
+                        <div class="text-3xl mb-4">📲</div>
+                        <h4 class="text-lg font-bold mb-2">Conteúdo Viral</h4>
+                        <p class="text-zinc-500 text-xs">Reels e Stories de alto alcance.</p>
+                    </div>
+                    <div class="p-6 rounded-xl bg-glass border border-white/5">
+                        <div class="text-3xl mb-4">🎯</div>
+                        <h4 class="text-lg font-bold mb-2">Ativações</h4>
+                        <p class="text-zinc-500 text-xs">Espaço exclusivo on-site.</p>
+                    </div>
+                    <div class="p-6 rounded-xl bg-glass border border-white/5">
+                        <div class="text-3xl mb-4">🎞️</div>
+                        <h4 class="text-lg font-bold mb-2">Aftermovie</h4>
+                        <p class="text-zinc-500 text-xs">Presença garantida no vídeo oficial.</p>
+                    </div>
+                </div>
+
+                <!-- Reels Section -->
+                <div class="mb-8">
+                    <h3 class="text-2xl font-black italic text-gradient uppercase tracking-tighter">Reels de Patrocínio (Exemplos)</h3>
+                    <p class="text-zinc-500 text-sm mb-6">Conteúdo produzido focado em engajamento e visibilidade para o parceiro.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+                    <!-- Reels 1: Sorteio -->
+                    <a href="https://www.instagram.com/reel/DLqh_lRA_Xy/" target="_blank" class="group relative aspect-video rounded-2xl overflow-hidden border border-white/10 shadow-2xl block">
+                        <img src="src/sorteio.jpeg" alt="Exemplo Reels Sorteio" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="play-overlay">
+                            <div class="play-btn-circle">
+                                <svg class="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.333-5.89a1.5 1.5 0 000-2.538L6.3 2.841z" />
+                                </svg>
+                            </div>
+                            <div class="absolute bottom-6 left-6 text-left">
+                                <span class="bg-purple-600 text-white text-[10px] font-black px-2 py-1 rounded uppercase tracking-widest">Sorteio</span>
+                                <p class="text-white font-bold text-lg mt-1 drop-shadow-md italic">Engajamento Direto</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Reels 2: Concurso Fantasia -->
+                    <a href="https://www.instagram.com/reel/DPhcue_EbKs/" target="_blank" class="group relative aspect-video rounded-2xl overflow-hidden border border-white/10 shadow-2xl block">
+                        <img src="src/fantasia.jpeg" alt="Exemplo Reels Fantasia" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="play-overlay">
+                            <div class="play-btn-circle">
+                                <svg class="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.333-5.89a1.5 1.5 0 000-2.538L6.3 2.841z" />
+                                </svg>
+                            </div>
+                            <div class="absolute bottom-6 left-6 text-left">
+                                <span class="bg-pink-600 text-white text-[10px] font-black px-2 py-1 rounded uppercase tracking-widest">Concurso</span>
+                                <p class="text-white font-bold text-lg mt-1 drop-shadow-md italic">Ativação Visual</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="text-2xl font-black italic text-gradient uppercase tracking-tighter">Exemplos Reais</h3>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                    <img src="src/corote.jpg" class="aspect-[3/4] rounded-xl object-cover border border-white/10 img-card">
+                    <img src="src/baly.jpg" class="aspect-[3/4] rounded-xl object-cover border border-white/10 img-card">
+                    <img src="src/ousadia2.jpg" class="aspect-[3/4] rounded-xl object-cover border border-white/10 img-card">
+                    <img src="src/paia.jpg" class="aspect-[3/4] rounded-xl object-cover border border-white/10 img-card">
+                    <img src="src/dafruta.jpg" class="aspect-[3/4] rounded-xl object-cover border border-white/10 img-card">
+                </div>
+            </section>
+
+            <!-- PLANOS DE PATROCÍNIO -->
+            <section id="planos" class="section-content">
+                <div class="mb-12 text-center lg:text-left">
+                    <h2 class="text-4xl font-black mb-4 italic">Escolha o plano ideal</h2>
+                    <p class="text-zinc-400 font-medium">Maximize o impacto da sua marca com investimento em visibilidade.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                    
+                    <!-- Plano Crush - R$ 300 -->
+                    <div class="plan-card">
+                        <div class="plan-header bg-zinc-800 border-b border-zinc-700">Crush</div>
+                        <div class="feature-row bg-white/5">
+                            <span class="feature-label">Investimento</span>
+                            <div class="text-2xl font-black text-gradient">R$ 300</div>
+                        </div>
+                        <div class="feature-row">
+                            <span class="feature-label">Uniforme da Organização</span>
+                            <div class="feature-value text-zinc-100">Logo Padrão</div>
+                        </div>
+                        <div class="feature-row">
+                            <span class="feature-label">Flyers & Social</span>
+                            <div class="feature-value text-zinc-100">Logo nos Flyers</div>
+                        </div>
+                        <div class="feature-row">
+                            <span class="feature-label">Pós-Evento</span>
+                            <div class="feature-value text-zinc-100">Logo Aftermovie</div>
+                        </div>
+                        <div class="feature-row">
+                            <span class="feature-label">Agradecimento</span>
+                            <div class="feature-value text-zinc-100">Geral no Evento</div>
+                        </div>
+                        <div class="mt-auto p-6">
+                            <a href="https://wa.me/5516999743335" class="w-full block text-center py-4 bg-zinc-800 text-white font-bold rounded-xl text-xs uppercase tracking-widest border border-zinc-700 hover:bg-zinc-700 transition-all">Fale Conosco</a>
+                        </div>
+                    </div>
+
+                    <!-- Plano Paquera - R$ 500 -->
+                    <div class="plan-card relative">
+                        <div class="plan-header bg-gradient-to-b from-purple-900 to-purple-800 border-b border-purple-700">Paquera</div>
+                        <div class="feature-row bg-purple-500/10">
+                            <span class="feature-label">Investimento</span>
+                            <div class="text-2xl font-black text-white">R$ 500</div>
+                        </div>
+                        <div class="feature-row">
+                            <span class="feature-label">Uniforme da Organização</span>
+                            <div class="feature-value text-zinc-100">Logo Padrão</div>
+                        </div>
+                        <div class="feature-row">
+                            <span class="feature-label">Flyers & Social</span>
+                            <div class="feature-value text-zinc-100">Logo nos Flyers</div>
+                        </div>
+                        <div class="feature-row">
+                            <span class="feature-label">Ativação On-site</span>
+                            <div class="feature-value text-purple-400 font-bold">Stand na Festa</div>
+                        </div>
+                        <div class="feature-row">
+                            <span class="feature-label">Agradecimento</span>
+                            <div class="feature-value text-zinc-100">Geral no Evento</div>
+                        </div>
+                        <div class="mt-auto p-6">
+                            <a href="https://wa.me/5516999743335" class="w-full block text-center py-4 bg-purple-600 text-white font-bold rounded-xl text-xs uppercase tracking-widest shadow-lg shadow-purple-600/20 hover:bg-purple-500 transition-all">Fale Conosco</a>
+                        </div>
+                    </div>
+
+                    <!-- Plano Cupido - R$ 1000 -->
+                    <div class="plan-card">
+                        <div class="plan-header bg-gradient-to-b from-pink-900 to-pink-800 border-b border-pink-700">Cupido</div>
+                        <div class="feature-row bg-pink-500/10">
+                            <span class="feature-label">Investimento</span>
+                            <div class="text-2xl font-black text-white">R$ 1000</div>
+                        </div>
+                        <div class="feature-row">
+                            <span class="feature-label">Uniforme da Organização</span>
+                            <div class="feature-value text-pink-400 font-bold italic">Logo em Destaque</div>
+                        </div>
+                        <div class="feature-row">
+                            <span class="feature-label">Ativação On-site</span>
+                            <div class="feature-value text-pink-400 font-bold">Stand na Festa</div>
+                        </div>
+                        <div class="feature-row">
+                            <span class="feature-label">Conteúdo Digital</span>
+                            <div class="feature-value text-zinc-100">Reels Viral Exclusivo</div>
+                        </div>
+                        <div class="feature-row">
+                            <span class="feature-label">Destaque Social</span>
+                            <div class="feature-value text-zinc-100">Postagem em Destaque</div>
+                        </div>
+                        <div class="feature-row">
+                            <span class="feature-label">Agradecimento</span>
+                            <div class="feature-value text-pink-400 font-bold">Exclusivo & Especial</div>
+                        </div>
+                        <div class="mt-auto p-6">
+                            <a href="https://wa.me/5516999743335" class="w-full block text-center py-4 bg-pink-600 text-white font-bold rounded-xl text-xs uppercase tracking-widest shadow-lg shadow-pink-600/20 hover:bg-pink-500 transition-all">Fale Conosco</a>
+                        </div>
+                    </div>
+
+                    <!-- Plano Customizado -->
+                    <div class="plan-card bg-zinc-900 border-2 border-purple-500/30">
+                        <div class="plan-header bg-black border-b border-white/5">Custom</div>
+                        <div class="feature-row bg-white/5">
+                            <span class="feature-label text-zinc-500">Personalizado</span>
+                            <div class="text-xl font-black text-purple-400">Sob Consulta</div>
+                        </div>
+                        <div class="p-8 text-center flex-1 flex flex-col justify-center">
+                            <div class="text-4xl mb-4 drop-shadow-[0_0_10px_rgba(168,85,247,0.5)]">✨</div>
+                            <h4 class="text-white font-bold mb-3">Plano sob medida</h4>
+                            <p class="text-zinc-400 text-[11px] leading-relaxed">
+                                Tem uma estratégia diferenciada? Ativação de marca exclusiva? <br> Vamos criar um projeto único para o seu negócio.
+                            </p>
+                        </div>
+                        <div class="p-6">
+                            <a href="https://wa.me/5516999743335" class="w-full block text-center py-4 bg-transparent border-2 border-purple-500/50 text-purple-400 font-bold rounded-xl text-xs uppercase tracking-widest hover:bg-purple-500/10 transition-all">Monte o Seu</a>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- CUTUCADA -->
+            <section id="cutucada" class="section-content">
+                <div id="cutucada-bg" class="py-24 px-12 md:py-32 md:px-20 shadow-2xl relative">
+                    
+                    <div class="flex flex-col items-center gap-8 mb-20 text-center">
+                        <div class="w-48 h-48 bg-white/5 rounded-full p-4 border border-white/20 backdrop-blur-md shadow-2xl">
+                            <img src="src/logocutucada.jpg" alt="Logo Cutucada" class="w-full h-full object-contain">
+                        </div>
+                        <div>
+                            <h2 class="text-6xl md:text-8xl font-black tracking-tighter text-white uppercase italic leading-none mb-4">Cutucada</h2>
+                            <p class="text-purple-400 text-2xl md:text-3xl font-bold uppercase tracking-[0.4em]">A primeira você nunca esquece!</p>
+                        </div>
+                    </div>
+
+                    <div class="grid lg:grid-cols-5 gap-16 items-start max-w-5xl mx-auto">
+                        <div class="lg:col-span-3 bg-black/50 p-8 rounded-3xl backdrop-blur-md border border-white/10 shadow-2xl">
+                            <h3 class="text-3xl font-bold mb-6 flex items-center gap-3">
+                                <span class="w-12 h-1.5 bg-purple-500 rounded-full"></span>
+                                A Proposta
+                            </h3>
+                            <p class="text-zinc-200 text-xl leading-relaxed">
+                                A <span class="text-white font-bold">CUTUCADA</span> é a união perfeita entre a energia universitária e o romantismo do <span class="text-pink-500 font-bold uppercase">Dia dos Namorados</span>. Com uma atmosfera rica em brasilidade e um sistema <span class="text-white font-bold italic">Open Bar</span>, projetamos uma experiência imersiva das 16h à meia-noite.
+                            </p>
+                        </div>
+
+                        <div class="lg:col-span-2 grid grid-cols-1 gap-5">
+                            <div class="flex items-center gap-5 p-6 bg-black/80 rounded-2xl border border-purple-500/40 backdrop-blur-xl shadow-xl transform transition hover:scale-105">
+                                <div class="text-3xl">📍</div>
+                                <div>
+                                    <div class="text-purple-400 text-[10px] font-black uppercase tracking-widest">Local</div>
+                                    <div class="text-white font-bold text-lg">Chaparral Eventos</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-5 p-6 bg-black/80 rounded-2xl border border-purple-500/40 backdrop-blur-xl shadow-xl transform transition hover:scale-105">
+                                <div class="text-3xl">👥</div>
+                                <div>
+                                    <div class="text-purple-400 text-[10px] font-black uppercase tracking-widest">Público</div>
+                                    <div class="text-white font-bold text-lg">600+ Pessoas</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-5 p-6 bg-black/80 rounded-2xl border border-purple-500/40 backdrop-blur-xl shadow-xl transform transition hover:scale-105">
+                                <div class="text-3xl">📅</div>
+                                <div>
+                                    <div class="text-purple-400 text-[10px] font-black uppercase tracking-widest">Data</div>
+                                    <div class="text-white font-bold text-lg">12 / 06 / 2026</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-5 p-6 bg-black/80 rounded-2xl border border-purple-500/40 backdrop-blur-xl shadow-xl transform transition hover:scale-105">
+                                <div class="text-3xl">⏰</div>
+                                <div>
+                                    <div class="text-purple-400 text-[10px] font-black uppercase tracking-widest">Horário</div>
+                                    <div class="text-white font-bold text-lg">16:00 - 00:00</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <script>
+        function navigate(sectionId) {
+            document.querySelectorAll('.section-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            document.getElementById('btn-' + sectionId).classList.add('active');
+
+            const titles = {
+                'quem-somos': 'Quem Somos Nós',
+                'marca-no-role': 'Sua Marca no Rolê',
+                'planos': 'Planos de Patrocínio',
+                'cutucada': 'Cutucada 2026'
+            };
+            document.getElementById('page-title').innerText = titles[sectionId];
+        }
+    </script>
+</body>
+</html>
